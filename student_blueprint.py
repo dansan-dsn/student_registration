@@ -33,7 +33,45 @@ def new_student():
     return student_schema.jsonify(new_student), 201
 
 @student.route('/', methods=['GET'])
-def get_student():
+def get_students():
     all_students = Student.query.all()
     result = students_schema.dump(all_students)
     return jsonify(result), 200
+
+@student.route('/<id>', methods=['GET'])
+def get_student(id):
+    student = Student.query.get(id)
+    if not student:
+        return jsonify({'msg': 'Student is not found'}), 404
+    
+    return student_schema.jsonify(student)
+
+@student.route('/update/<id>', methods=['PUT'])
+def update_student(id):
+    student = Student.query.get(id)
+    if not student:
+        return jsonify({"error": "Student not found "})
+    data = request.json
+
+    if 'name' in data:
+        student.name = data['name']
+    if 'reg_no' in data:
+        student.reg_no = data['reg_no']
+    if 'course' in data:
+        student.course = data['course']
+    if 'phone_no' in data:
+        student.phone_no = data['phone_no']
+    
+    db.session.commit()
+
+    return student_schema.jsonify(student), 200
+
+@student.route('/remove/<id>', methods=['DELETE'])
+def delete_student(id):
+    student = Student.query.get(id)
+    if not student:
+        return jsonify({"error": "Student not found"})
+    db.session.delete(student)
+    db.session.commit()
+
+    return jsonify({"msg": "Student deleted successfully"})
