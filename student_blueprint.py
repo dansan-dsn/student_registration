@@ -24,7 +24,7 @@ def new_student():
     
     existing_student = Student.query.filter_by(reg_no=reg_no).first()
     if existing_student:
-        return jsonify({'error': 'Student with the same registration number already exists'}), 400
+        return jsonify({'error': 'Student with the same registration number already exists'}), 401
     
     new_student = Student(name=name, reg_no=reg_no, course=course, phone_no=phone_no)
     db.session.add(new_student)
@@ -74,4 +74,4 @@ def delete_student(id):
     db.session.delete(student)
     db.session.commit()
 
-    return jsonify({"msg": "Student deleted successfully"})
+    return jsonify({"msg": "Student deleted successfully"}), 200

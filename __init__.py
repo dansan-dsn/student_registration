@@ -4,11 +4,13 @@ from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 import os
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 db = SQLAlchemy()
 ma = Marshmallow()
 migrate = Migrate()
 jwt = JWTManager()
+cors = CORS()
 
 def create_app():
     app = Flask(__name__)
@@ -24,6 +26,7 @@ def create_app():
     ma.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    cors.init_app(app)
 
     # Import and register blueprints
     from .student_blueprint import student
