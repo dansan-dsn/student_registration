@@ -6,7 +6,7 @@ import os
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
-db = SQLAlchemy()
+db = SQLAlchemy()   
 ma = Marshmallow()
 migrate = Migrate()
 jwt = JWTManager()
@@ -29,7 +29,7 @@ def create_app():
     cors.init_app(app)
 
     # Import and register blueprints
-    from .student_blueprint import student
-    app.register_blueprint(student, url_prefix='/student')
+    from .user import user
+    app.register_blueprint(user, url_prefix='/user')
 
     return app
