@@ -19,7 +19,7 @@ def create_app():
     basedir = os.path.abspath(os.path.dirname(__file__))    
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'student.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['JWT_SECRET_KEY'] ='super-secret'  # Change this!
+    app.config['JWT_SECRET_KEY'] ='super-secret'  # More secrete, change!
 
     # Initialize extensions
     db.init_app(app)
@@ -30,6 +30,8 @@ def create_app():
 
     # Import and register blueprints
     from .user import user
+    from .course_and_units import course_and_units
     app.register_blueprint(user, url_prefix='/user')
+    app.register_blueprint(course_and_units, url_prefix='/course_and_units')
 
     return app

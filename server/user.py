@@ -16,16 +16,12 @@ users_schema = UserSchema(many=True)
 
 def generate_user_number(role):
     if role == 'admin':
-        return 'admin' + str(random.randint(1000, 9999))
+        code = 'admin' + str(random.randint(1000, 9999))
+        print(code)
+        return code 
     elif role == 'student':
         return 'stud' + str(random.randint(1000, 9999))
     return None 
-
-# def set_password(self, password):
-#         self.password = generate_password_hash(password)
-
-# def check_password(self, password):
-#         return check_password_hash(self.password, password)
 
 @user.route('/new_user', methods=['POST'])
 def new_user():
@@ -98,11 +94,11 @@ def get_user(id):
 def update_user(id):
     user = User.query.get(id)
     if not user:
-        return jsonify({"error": "User not found "})
+        return jsonify({"error": "User not found "}), 404
     
     data = request.get_json()
     if not data:
-        return jsonify({"error": "No data to update"})
+        return jsonify({"error": "No data to update"}), 400
 
     if 'first_name' in data:
         user.first_name = data['first_name']
@@ -137,7 +133,7 @@ def forgot_password():
     user.password = hashed_password
     db.session.commit()
 
-    return jsonify({"success": f"Password for {user_no} changed successfully"})
+    return jsonify({"success": f"Password for {user_no} changed successfully"}), 200
 
 @user.route('/remove/<id>', methods=['DELETE'])
 def delete_user(id):
@@ -149,7 +145,22 @@ def delete_user(id):
 
     return jsonify({"msg": f"User {id} deleted successfully"}), 200
 
-# @user.route('/login', methods=['POST'])
-# def login():
-#     user = 
+@user.route('/login', methods=['POST'])
+def login(): 
+    data = request.get_json()
+
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({"error": "Username and password are required"}), 400
+ 
+    user = User.query.filter_by(user_no=username).first()
+    if not user:
+            return jsonify({"error": "User does not exist"}), 404
     
+    is_a_match = check_password_hash(user.password, password)
+    if not is_a_match:
+        return jsonify({"error": "Password does not match"}), 401
+    
+    return jsonify({'success': f'User {username} logged in successfully'}), 200

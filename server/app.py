@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # username, password, - username - student_no
     # reg-no, firtname, lastName, email
 
-    # Login - useraname, password
+    # Login - useraname, password 
     # registration course, year, semister, course units(codes)
     # enroll, conituining , fresher, finalist,
     # see's his data with results if present
@@ -19,6 +19,7 @@ if __name__ == '__main__':
     # pays tution
 
     # dashboard - admin
+    # enters courses and their units
     # enters results, views them
     # access using id, reg
 
